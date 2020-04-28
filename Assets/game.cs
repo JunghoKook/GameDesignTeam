@@ -24,6 +24,7 @@ public class game : MonoBehaviour
     bool switch_ready = true;
 
     int color = 0;
+    int color_next = 0;
 
     // 0 = game running
     // 1 = win
@@ -117,11 +118,43 @@ public class game : MonoBehaviour
         switch_ready = true;
     }
 
-    void SwitchColor()
+    // Set differentColor as true to guarantee a different color
+    void GenerateNextColor(bool differentColor = false)
     {
+        int numColors = 0;
         if (level == 1)
         {
-            color = Random.Range(0, 2);
+            numColors = 2;
+        }
+        else if (level == 2)
+        {
+            numColors = 2;
+        }
+        else if (level == 3)
+        {
+            numColors = 4;
+        }
+        else if (level == 4)
+        {
+            numColors = 6;
+        }
+        int cnew = Random.Range(0, numColors);
+        if (differentColor)
+        {
+            while (cnew == color_next)
+            {
+                cnew = Random.Range(0, numColors);
+            }
+        }
+        color_next = cnew;
+    }
+
+    void SwitchColor()
+    {
+        color = color_next;
+        GenerateNextColor();
+        if (level == 1)
+        {
             if (color == 0)
                 GetComponent<Renderer>().material.color = Color.green;
             else if (color == 1)
@@ -129,7 +162,6 @@ public class game : MonoBehaviour
         }
         else if (level == 2)
         {
-            color = Random.Range(0, 2);
             if (color == 0)
                 GetComponent<Renderer>().material.color = Color.blue;
             else if (color == 1)
@@ -137,7 +169,6 @@ public class game : MonoBehaviour
         }
         else if (level == 3)
         {
-            color = Random.Range(0, 4);
             if (color == 0)
                 GetComponent<Renderer>().material.color = Color.black;
             else if (color == 1)
@@ -149,7 +180,6 @@ public class game : MonoBehaviour
         }
         else if (level == 4)
         {
-            color = Random.Range(0, 6);
             if (color == 0)
                 GetComponent<Renderer>().material.color = Color.green;
             else if (color == 1)
@@ -167,6 +197,10 @@ public class game : MonoBehaviour
 
     // moves the the cube that is the player
     bool move() {
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            GenerateNextColor(true);
+        }
         if (Input.GetKeyDown("up") && transform.position.z < 5)
         {
             transform.Translate(0, 0, 1);
@@ -223,8 +257,13 @@ public class game : MonoBehaviour
                         GUI.Label(new Rect(0, 100, 200, 200), "Green = <-");
                     else if (color == 1)
                         GUI.Label(new Rect(0, 100, 200, 200), "Red = ->");
+
+                    if (color_next == 0)
+                        GUI.Label(new Rect(0, 200, 200, 200), "Next color: Green = <-");
+                    else if (color_next == 1)
+                        GUI.Label(new Rect(0, 200, 200, 200), "Next color: Red = ->");
                     //GetComponent<Renderer>().material.color = Color.red;
-                        GUI.Label(new Rect(0, 20, 200, 200), "Get to the gray goal. Learn veritcal movement. Right arrow to move right during red color and left arrow for left for green color. Not doing this loses the game.");
+                    GUI.Label(new Rect(0, 20, 200, 200), "Get to the gray goal. Learn veritcal movement. Right arrow to move right during red color and left arrow for left for green color. Not doing this loses the game.");
                 }
                 else if (level == 2)
                 {
@@ -233,6 +272,11 @@ public class game : MonoBehaviour
                     //GetComponent<Renderer>().material.color = Color.black;
                     else if (color == 1)
                         GUI.Label(new Rect(0, 100, 200, 200), "White = s");
+
+                    if (color_next == 0)
+                        GUI.Label(new Rect(0, 200, 200, 200), "Next color: Black = w");
+                    else if (color_next == 1)
+                        GUI.Label(new Rect(0, 200, 200, 200), "Next color: White = s");
                     GUI.Label(new Rect(0, 20, 200, 200), "Get to the gray goal. Learn horizontal movement. Up arrow to move forward during blue color and down arrow for downward for yellow color. Not doing this loses the game.");
                 }
                 else if (level == 3)
@@ -246,6 +290,15 @@ public class game : MonoBehaviour
                         GUI.Label(new Rect(0, 100, 200, 200), "Green = <-");
                     else if (color == 2)
                         GUI.Label(new Rect(0, 100, 200, 200), "Red = ->");
+
+                    if (color_next == 0)
+                        GUI.Label(new Rect(0, 200, 200, 200), "Next color: Black = w");
+                    else if (color_next == 1)
+                        GUI.Label(new Rect(0, 200, 200, 200), "Next color: White = s");
+                    else if (color_next == 3)
+                        GUI.Label(new Rect(0, 200, 200, 200), "Next color: Green = <-");
+                    else if (color_next == 2)
+                        GUI.Label(new Rect(0, 200, 200, 200), "Next color: Red = ->");
                     GUI.Label(new Rect(0, 20, 200, 200), "Get to the gray goal. Learn depth. w key to move up during black color and s key for down for white color. Not doing this loses the game.");
                 }
                 else if (level == 4)
@@ -266,6 +319,19 @@ public class game : MonoBehaviour
                     //GetComponent<Renderer>().material.color = Color.black;
                     else if (color == 5)
                         GUI.Label(new Rect(0, 100, 200, 200), "White = s");
+
+                    if (color_next == 0)
+                        GUI.Label(new Rect(0, 200, 200, 200), "Next color: Green = <-");
+                    else if (color_next == 1)
+                        GUI.Label(new Rect(0, 200, 200, 200), "Next color: Red = ->");
+                    else if (color_next == 2)
+                        GUI.Label(new Rect(0, 200, 200, 200), "Next color: Blue = ^");
+                    else if (color_next == 3)
+                        GUI.Label(new Rect(0, 200, 200, 200), "Next color: Yellow = V");
+                    else if (color_next == 4)
+                        GUI.Label(new Rect(0, 200, 200, 200), "Next color: Black = w");
+                    else if (color_next == 5)
+                        GUI.Label(new Rect(0, 200, 200, 200), "Next color: White = s");
                     GUI.Label(new Rect(0, 20, 200, 200), "Use everything you have learned so far to get to the gray goal. Succeeding will send you back to level one. Any of the previous failures will lose the game.");
                 }
             }
