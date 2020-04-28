@@ -38,7 +38,6 @@ public class game : MonoBehaviour
     // resets the level
     void resetLevel() {
         setGoal();
-        //ChangeLight();
         transform.position = new Vector3(0, 0, 0);
     }
 
@@ -215,7 +214,7 @@ public class game : MonoBehaviour
             GUI.Label(new Rect(0, 0, 200, 200), "Level: " + level);
             if (state == 0)
             {
-                if (switching_soon) // set a bool
+                if (switching_soon)
                     GUI.Label(new Rect(0, 120, 200, 200), "Switching soon");
                 //GetComponent<Renderer>().material.color = Color.white;
                 if (level == 1)
