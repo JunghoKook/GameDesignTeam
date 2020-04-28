@@ -19,8 +19,9 @@ public class game : MonoBehaviour
     GameObject goal;
     bool musicSet = false;
 
-    int currTime = 0;
-    int wait = 500;
+    float wait = 2.0f;
+    bool switching_soon = false;
+    bool switch_ready = true;
 
     int color = 0;
 
@@ -37,7 +38,7 @@ public class game : MonoBehaviour
     // resets the level
     void resetLevel() {
         setGoal();
-        currTime = 0;
+        //ChangeLight();
         transform.position = new Vector3(0, 0, 0);
     }
 
@@ -96,85 +97,72 @@ public class game : MonoBehaviour
         beepColorSwitch.loop = true;
         resetLevel();
     }
-
-    // changes the movement that is allowed
-    void changeLight()
+    
+    public void ChangeLight()
     {
-        if (currTime >= wait * 2 / 3 && !beepColorSwitch.isPlaying)
-        {
-            beepColorSwitch.Play();
-        }
+        if (!switch_ready) return;
+        StartCoroutine(IChangeLight());
+    }
+
+    IEnumerator IChangeLight()
+    {
+        SwitchColor();
+        switching_soon = false;
+        switch_ready = false;
+        yield return new WaitForSeconds(wait * 2.0f / 3.0f);
+        switching_soon = true;
+        beepColorSwitch.Play();
+        yield return new WaitForSeconds(wait * 1.0f / 3.0f);
+        switching_soon = false;
+        beepColorSwitch.Stop();
+        switch_ready = true;
+    }
+
+    void SwitchColor()
+    {
         if (level == 1)
         {
-            if (currTime % wait == 0)
-            {
-                color = Random.Range(0, 2);
-                if (color == 0)
-                    GetComponent<Renderer>().material.color = Color.green;
-                else if (color == 1)
-                    GetComponent<Renderer>().material.color = Color.red;
-                currTime = 1;
-                beepColorSwitch.Stop();
-            }
-            else
-                currTime += 1;
+            color = Random.Range(0, 2);
+            if (color == 0)
+                GetComponent<Renderer>().material.color = Color.green;
+            else if (color == 1)
+                GetComponent<Renderer>().material.color = Color.red;
         }
-
         else if (level == 2)
         {
-            if (currTime % wait == 0)
-            {
-                color = Random.Range(0, 2);
-                if (color == 0)
-                    GetComponent<Renderer>().material.color = Color.blue;
-                else if (color == 1)
-                    GetComponent<Renderer>().material.color = Color.yellow;
-                currTime = 1;
-                beepColorSwitch.Stop();
-            }
-            else
-                currTime += 1;
+            color = Random.Range(0, 2);
+            if (color == 0)
+                GetComponent<Renderer>().material.color = Color.blue;
+            else if (color == 1)
+                GetComponent<Renderer>().material.color = Color.yellow;
         }
         else if (level == 3)
         {
-            if (currTime % wait == 0)
-            {
-                color = Random.Range(0, 4);
-                if (color == 0)
-                    GetComponent<Renderer>().material.color = Color.black;
-                else if (color == 1)
-                    GetComponent<Renderer>().material.color = Color.white;
-                else if (color == 2)
-                    GetComponent<Renderer>().material.color = Color.red;
-                else if (color == 3)
-                    GetComponent<Renderer>().material.color = Color.green;
-                currTime = 1;
-                beepColorSwitch.Stop();
-            }
-            else
-                currTime += 1;
+            color = Random.Range(0, 4);
+            if (color == 0)
+                GetComponent<Renderer>().material.color = Color.black;
+            else if (color == 1)
+                GetComponent<Renderer>().material.color = Color.white;
+            else if (color == 2)
+                GetComponent<Renderer>().material.color = Color.red;
+            else if (color == 3)
+                GetComponent<Renderer>().material.color = Color.green;
         }
-        else if (level == 4) {
-            if (currTime % wait == 0)
-            {
-                color = Random.Range(0, 6);
-                if (color == 0)
-                    GetComponent<Renderer>().material.color = Color.green;
-                else if (color == 1)
-                    GetComponent<Renderer>().material.color = Color.red;
-                else if (color == 2)
-                    GetComponent<Renderer>().material.color = Color.blue;
-                else if (color == 3)
-                    GetComponent<Renderer>().material.color = Color.yellow;
-                else if (color == 4)
-                    GetComponent<Renderer>().material.color = Color.black;
-                else if (color == 5)
-                    GetComponent<Renderer>().material.color = Color.white;
-                currTime = 1;
-                beepColorSwitch.Stop();
-            }
-            else
-                currTime += 1;
+        else if (level == 4)
+        {
+            color = Random.Range(0, 6);
+            if (color == 0)
+                GetComponent<Renderer>().material.color = Color.green;
+            else if (color == 1)
+                GetComponent<Renderer>().material.color = Color.red;
+            else if (color == 2)
+                GetComponent<Renderer>().material.color = Color.blue;
+            else if (color == 3)
+                GetComponent<Renderer>().material.color = Color.yellow;
+            else if (color == 4)
+                GetComponent<Renderer>().material.color = Color.black;
+            else if (color == 5)
+                GetComponent<Renderer>().material.color = Color.white;
         }
     }
 
@@ -227,7 +215,7 @@ public class game : MonoBehaviour
             GUI.Label(new Rect(0, 0, 200, 200), "Level: " + level);
             if (state == 0)
             {
-                if (currTime >= wait * 2 / 3)
+                if (switching_soon) // set a bool
                     GUI.Label(new Rect(0, 120, 200, 200), "Switching soon");
                 //GetComponent<Renderer>().material.color = Color.white;
                 if (level == 1)
@@ -316,7 +304,7 @@ public class game : MonoBehaviour
         }
         else
         {
-            changeLight();
+            ChangeLight();
             if (!move())
                 state = 2;
                 //resetLevel();
