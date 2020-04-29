@@ -186,6 +186,7 @@ public class game : MonoBehaviour
     // moves the the cube that is the player
     bool move()
     {
+        cancelCurrColor();
         if (Input.GetKeyDown("up") && transform.position.z < 5)
         {
             transform.Translate(0, 0, 1);
@@ -299,6 +300,14 @@ public class game : MonoBehaviour
             }
         }
 
+    }
+
+    void cancelCurrColor() {
+        if (Input.GetKeyDown("space") && state == 0)
+        {
+            currTime = wait * 2 / 3;
+            changeLight();
+        }
     }
 
     // Update is called once per frame
