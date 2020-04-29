@@ -195,8 +195,17 @@ public class game : MonoBehaviour
         }
     }
 
+    void cancelCurrColor() {
+        if (Input.GetKeyDown("space") && state == 0)
+        {
+            currTime = wait * 2 / 3;
+            changeLight();
+        }
+    }
+
     // moves the the cube that is the player
     bool move() {
+        cancelCurrColor();
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             GenerateNextColor(true);
