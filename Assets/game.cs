@@ -269,7 +269,7 @@ public class game : MonoBehaviour
         else
         {
             GUI.color = Color.black;
-            GUI.Label(new Rect(0, 0, 200, 200), "Level: " + level);
+            GUI.Label(new Rect(0, 0, 200, 200), "Level: " + level, font);
             if (state == 0)
             {
                 if (switching_soon)
