@@ -19,12 +19,14 @@ public class game : MonoBehaviour
     GameObject goal;
     bool musicSet = false;
 
-    float wait = 2.0f;
+    float wait = 1.0f;
     bool switching_soon = false;
     bool switch_ready = true;
 
     int color = 0;
     int color_next = 0;
+
+    bool moveAllowed;
 
     // 0 = game running
     // 1 = win
@@ -52,6 +54,10 @@ public class game : MonoBehaviour
             currentMusic = GameObject.FindWithTag("music1").GetComponent<AudioSource>();
             currentMusic.Stop();
             int col = Random.Range(-11, 12);
+            if (col == 0)
+            {
+                col = -12;
+            }
             goal.transform.position = new Vector3(col, 0, 0);
             goal.GetComponent<Renderer>().material.color = Color.gray;
         }
@@ -73,6 +79,10 @@ public class game : MonoBehaviour
             currentMusic.Stop();
             int row = Random.Range(-5, 6);
             int col = Random.Range(-11, 12);
+            if (col == 0)
+            {
+                col = -12;
+            }
             if (row == 0)
             {
                 row = -6;
@@ -176,31 +186,72 @@ public class game : MonoBehaviour
         }
     }
 
+    bool matchColor()
+    {
+        Color targetColor = Color.clear;
+        if (Input.GetKeyDown("1"))
+        {
+            targetColor = Color.green;
+        }
+        else if (Input.GetKeyDown("2"))
+        {
+            targetColor = Color.red;
+        }
+        else if (Input.GetKeyDown("3"))
+        {
+            targetColor = Color.blue;
+        }
+        else if (Input.GetKeyDown("4"))
+        {
+            targetColor = Color.yellow;
+        }
+        else
+        {
+            return true;
+        }
+
+        if (GetComponent<Renderer>().material.color == targetColor)
+        {
+            moveAllowed = true;
+            return true;
+        }
+        return false;
+    }
     // moves the the cube that is the player
     bool move() {
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             GenerateNextColor(true);
         }
-        if (Input.GetKeyDown("up") && transform.position.z < 5)
+
+        if (!matchColor())
         {
-            transform.Translate(0, 0, 1);
-            return GetComponent<Renderer>().material.color == Color.blue;
+            return false;
         }
-        else if (Input.GetKeyDown("down") && transform.position.z > -5)
+
+        if (moveAllowed)
         {
-            transform.Translate(0, 0, -1);
-            return GetComponent<Renderer>().material.color == Color.yellow;
-        }
-        else if (Input.GetKeyDown("right") && transform.position.x < 11)
-        {
-            transform.Translate(1, 0, 0);
-            return GetComponent<Renderer>().material.color == Color.red;
-        }
-        else if (Input.GetKeyDown("left") && transform.position.x > -11)
-        {
-            transform.Translate(-1, 0, 0);
-            return GetComponent<Renderer>().material.color == Color.green;
+            moveAllowed = false;
+            if (Input.GetKeyDown("up") && transform.position.z < 5)
+            {
+                transform.Translate(0, 0, 1);
+            }
+            else if (Input.GetKeyDown("down") && transform.position.z > -5)
+            {
+                transform.Translate(0, 0, -1);
+            }
+            else if (Input.GetKeyDown("right") && transform.position.x < 11)
+            {
+                transform.Translate(1, 0, 0);
+            }
+            else if (Input.GetKeyDown("left") && transform.position.x > -11)
+            {
+                transform.Translate(-1, 0, 0);
+            }
+            else
+            {
+                moveAllowed = true;
+            }
         }
         return true;
     }
@@ -225,55 +276,33 @@ public class game : MonoBehaviour
                 if (level == 1)
                 {
                     if (color == 0)
-                        GUI.Label(new Rect(0, 100, 200, 200), "Green = <-");
+                        GUI.Label(new Rect(0, 100, 200, 200), "Green = 1");
                     else if (color == 1)
-                        GUI.Label(new Rect(0, 100, 200, 200), "Red = ->");
-
-                    if (color_next == 0)
-                        GUI.Label(new Rect(0, 200, 200, 200), "Next color: Green = <-");
-                    else if (color_next == 1)
-                        GUI.Label(new Rect(0, 200, 200, 200), "Next color: Red = ->");
-                    //GetComponent<Renderer>().material.color = Color.red;
-                    GUI.Label(new Rect(0, 20, 200, 200), "Get to the gray goal. Learn veritcal movement. Right arrow to move right during red color and left arrow for left for green color. Not doing this loses the game.");
+                        GUI.Label(new Rect(0, 100, 200, 200), "Red = 2");
                 }
                 else if (level == 2)
                 {
                     if (color == 0)
-                        GUI.Label(new Rect(0, 100, 200, 200), "Blue = ^");
+                        GUI.Label(new Rect(0, 100, 200, 200), "Blue = 3");
                     //GetComponent<Renderer>().material.color = Color.blue;
                     else if (color == 1)
-                        GUI.Label(new Rect(0, 100, 200, 200), "Yellow = V");
-
-                    if (color_next == 0)
-                        GUI.Label(new Rect(0, 200, 200, 200), "Next color: Blue = ^");
-                    else if (color_next == 1)
-                        GUI.Label(new Rect(0, 200, 200, 200), "Next color: Yellow = V");
-                    GUI.Label(new Rect(0, 20, 200, 200), "Get to the gray goal. Learn horizontal movement. Up arrow to move forward during blue color and down arrow for downward for yellow color. Not doing this loses the game.");
+                        GUI.Label(new Rect(0, 100, 200, 200), "Yellow = 4");
                 }
                 else if (level == 3)
                 {
                     if (color == 0)
-                        GUI.Label(new Rect(0, 100, 200, 200), "Green = <-");
+                        GUI.Label(new Rect(0, 100, 200, 200), "Green = 1");
                     else if (color == 1)
-                        GUI.Label(new Rect(0, 100, 200, 200), "Red = ->");
+                        GUI.Label(new Rect(0, 100, 200, 200), "Red = 2");
                     //GetComponent<Renderer>().material.color = Color.red;
                     else if (color == 2)
-                        GUI.Label(new Rect(0, 100, 200, 200), "Blue = ^");
+                        GUI.Label(new Rect(0, 100, 200, 200), "Blue = 3");
                     //GetComponent<Renderer>().material.color = Color.blue;
                     else if (color == 3)
-                        GUI.Label(new Rect(0, 100, 200, 200), "Yellow = V");
+                        GUI.Label(new Rect(0, 100, 200, 200), "Yellow = 4");
                     //GetComponent<Renderer>().material.color = Color.yellow;
-
-                    if (color_next == 0)
-                        GUI.Label(new Rect(0, 200, 200, 200), "Next color: Green = <-");
-                    else if (color_next == 1)
-                        GUI.Label(new Rect(0, 200, 200, 200), "Next color: Red = ->");
-                    else if (color_next == 2)
-                        GUI.Label(new Rect(0, 200, 200, 200), "Next color: Blue = ^");
-                    else if (color_next == 3)
-                        GUI.Label(new Rect(0, 200, 200, 200), "Next color: Yellow = V");
-                    GUI.Label(new Rect(0, 20, 200, 200), "Use everything you have learned so far to get to the gray goal. Succeeding will send you back to level one. Any of the previous failures will lose the game.");
                 }
+                GUI.Label(new Rect(0, 20, 200, 200), "Get to the gray goal. Press the matching key for each color. If the correct key is pressed, you can move once in any direction with arrow keys. If not, the level is reset.");
             }
             else if (state == 1)
             {
