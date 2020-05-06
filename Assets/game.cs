@@ -259,10 +259,12 @@ public class game : MonoBehaviour
     // displays the level and the instrcutions for the level
     void OnGUI()
     {
+        GUIStyle font = new GUIStyle();
+        font.fontSize = 15;
         if (startScreen)
         {
             GUI.color = Color.black;
-            GUI.Label(new Rect(0, 0, 200, 200), "Press space to start the tutorial");
+            GUI.Label(new Rect(0, 0, 200, 200), "Press space to start the tutorial", font);
         }
         else
         {
@@ -271,45 +273,45 @@ public class game : MonoBehaviour
             if (state == 0)
             {
                 if (switching_soon)
-                    GUI.Label(new Rect(0, 120, 200, 200), "Switching soon");
+                    GUI.Label(new Rect(0, 120, 200, 200), "Switching soon", font);
                 //GetComponent<Renderer>().material.color = Color.white;
                 if (level == 1)
                 {
                     if (color == 0)
-                        GUI.Label(new Rect(0, 100, 200, 200), "Green = 1");
+                        GUI.Label(new Rect(0, 100, 200, 200), "Green = 1", font);
                     else if (color == 1)
-                        GUI.Label(new Rect(0, 100, 200, 200), "Red = 2");
+                        GUI.Label(new Rect(0, 100, 200, 200), "Red = 2", font);
                 }
                 else if (level == 2)
                 {
                     if (color == 0)
-                        GUI.Label(new Rect(0, 100, 200, 200), "Blue = 3");
+                        GUI.Label(new Rect(0, 100, 200, 200), "Blue = 3", font);
                     //GetComponent<Renderer>().material.color = Color.blue;
                     else if (color == 1)
-                        GUI.Label(new Rect(0, 100, 200, 200), "Yellow = 4");
+                        GUI.Label(new Rect(0, 100, 200, 200), "Yellow = 4", font);
                 }
                 else if (level == 3)
                 {
                     if (color == 0)
-                        GUI.Label(new Rect(0, 100, 200, 200), "Green = 1");
+                        GUI.Label(new Rect(0, 100, 200, 200), "Green = 1", font);
                     else if (color == 1)
-                        GUI.Label(new Rect(0, 100, 200, 200), "Red = 2");
+                        GUI.Label(new Rect(0, 100, 200, 200), "Red = 2"), font;
                     //GetComponent<Renderer>().material.color = Color.red;
                     else if (color == 2)
-                        GUI.Label(new Rect(0, 100, 200, 200), "Blue = 3");
+                        GUI.Label(new Rect(0, 100, 200, 200), "Blue = 3", font);
                     //GetComponent<Renderer>().material.color = Color.blue;
                     else if (color == 3)
-                        GUI.Label(new Rect(0, 100, 200, 200), "Yellow = 4");
+                        GUI.Label(new Rect(0, 100, 200, 200), "Yellow = 4", font);
                     //GetComponent<Renderer>().material.color = Color.yellow;
                 }
-                GUI.Label(new Rect(0, 20, 200, 200), "Get to the gray goal. Press the matching key for each color. If the correct key is pressed, you can move once in any direction with arrow keys. If not, the level is reset.");
+                GUI.Label(new Rect(0, 20, 200, 200), "Get to the gray goal. \nPress the matching key for each color. \nIf the correct key is pressed, you can move once in any direction with arrow keys. \nIf not, the level is reset.", font);
             }
             else if (state == 1)
             {
-                GUI.Label(new Rect(0, 20, 200, 200), "You Win. Press space to restart.");
+                GUI.Label(new Rect(0, 20, 200, 200), "You Win. Press space to restart.", font);
             }
             else if (state == 2) {
-                GUI.Label(new Rect(0, 20, 200, 200), "You Lose. Press space to restart.");
+                GUI.Label(new Rect(0, 20, 200, 200), "You Lose. Press space to restart.", font);
             }
         }
 
