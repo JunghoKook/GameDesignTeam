@@ -295,7 +295,7 @@ public class game : MonoBehaviour
                     if (color == 0)
                         GUI.Label(new Rect(0, 100, 200, 200), "Green = 1", font);
                     else if (color == 1)
-                        GUI.Label(new Rect(0, 100, 200, 200), "Red = 2"), font;
+                        GUI.Label(new Rect(0, 100, 200, 200), "Red = 2", font);
                     //GetComponent<Renderer>().material.color = Color.red;
                     else if (color == 2)
                         GUI.Label(new Rect(0, 100, 200, 200), "Blue = 3", font);
